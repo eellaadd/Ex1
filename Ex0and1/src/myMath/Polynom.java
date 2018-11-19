@@ -104,18 +104,17 @@ public class Polynom implements Polynom_able{
 	{
 		Iterator<Monom> it1 = this.iteretor();
 		Iterator<Monom> it2 = p1.iteretor();
-		
+
 		while(it1.hasNext() || it2.hasNext())
 		{
 			if(it1.hasNext() && !it2.hasNext() || !it1.hasNext() && it2.hasNext())
 				return false;
-			
+
 			Monom m1 = it1.next();
 			Monom m2 = it2.next();
-			
+
 			if(!(m1.equals(m2)))
-				return false;
-				
+				return false;	
 		}
 		return true;
 	}
@@ -123,7 +122,7 @@ public class Polynom implements Polynom_able{
 	@Override
 	public boolean isZero()
 	{
-		
+
 
 		return false;
 	}
@@ -131,8 +130,26 @@ public class Polynom implements Polynom_able{
 	@Override
 	public double root(double x0, double x1, double eps)
 	{
+		double y0 = f(x0);
+		double y1 = f(x1);
 
-		return 0;
+		if(y0*y1 > 0)
+			System.err.println("f(x0) and f(x1) should have different signs");
+
+		double x_diff = Math.abs(x0-x1);
+		double y_diff = Math.abs(f(x0)-f(x1));
+
+		if(x_diff > eps || y_diff > eps)
+		{
+			double x_mid = (x0+x1)/2;
+			double y_mid = f(x_mid);
+			
+			if(y0*y_mid <= 0)
+				return root(x0, x_mid, eps);
+			else
+				return root(x_mid, x1, eps);
+		}
+		return x0;
 	}
 
 	@Override
@@ -194,7 +211,5 @@ public class Polynom implements Polynom_able{
 		}
 		return ans;
 	}
-
-
 
 }
